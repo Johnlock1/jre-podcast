@@ -6,19 +6,25 @@ from podcast import Podcast
 
 podcasts = {}
 
-for page in range(1, 168):
-    print(page, end=' ')
+with open('podcasts.json', encoding='utf-8') as f:
+    data = json.load(f)
+    keys = data.keys()
 
-    url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
-    response = requests.get(url)
-    tree = lxml.html.fromstring(response.text)
+    for page in range(1, 3): # 168
+        print(f'Page: {page}')
 
-    podcasts_tree = tree.cssselect(selector['podcasts'])[0]
+        url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
+        response = requests.get(url)
+        tree = lxml.html.fromstring(response.text)
 
-    for i in range(2, 11):
-        p = Podcast(podcasts_tree[i])
+        podcasts_tree = tree.cssselect(selector['podcasts'])[0]
 
-        podcasts[p.num] = [p.date, p.title, p.link]
+        for i in range(2, 11):
+            p = Podcast()
+            p.from_tree(podcasts_tree[i])
+            if p.num in keys:
+                print(f"True {p.num}")
+            else:
+                print(f"False {p.num}")
 
-with open('podcasts.json', 'w') as f:
-    json.dump(podcasts, f)
+                podcasts[p.num] = [p.date, p.title, p.link]

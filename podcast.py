@@ -1,21 +1,62 @@
-from config import selector
+import re
+from datetime import datetime
 
+from config import selector
 
 class Podcast:
 
-    def __init__(self, tree):
+    def __init__(self):
+        pass
+
+    def from_tree(self, tree):
         self.tree = tree
         self.num = self.extract(selector['num'])
         self.date = self.extract(selector['date'])
         self.title = self.extract(selector['title'])
         self.link = self.extract_link()
-        # self.p()
+
+    def from_json_file(self, key, value):
+        self.num = key
+        self.date = value[0]
+        self.title = value[1]
+        self.link = value[2]
 
     def extract(self, selector):
         return self.tree.cssselect(selector)[0].text_content()
 
     def extract_link(self):
         return self.tree.cssselect(selector['link'])[0].get('href')
+
+    def date_formated(self, frm1='%m.%d.%y', frm2='%Y %b %d'):
+        return datetime.strptime(self.date,frm1).strftime(frm2)
+
+    def title_formated(self):
+        regex = ' with | & |, '
+        t = ''
+
+        if self.title[:5] == 'Fight':
+            return self.title + '\n'
+        guests = re.split(regex, self.title)
+        l = len(guests)
+        for i, g in enumerate(guests):
+            if i == 0 and g[:3] in ['MMA', 'JRE']:
+                t += f'{g}'
+                if i < l-1:
+                    t += ' with '
+            else:
+                t += f'[[{g}]]'
+                if i < l-1:
+                    t += ', '
+        t + '\n'
+        return t
+
+
+
+    def wiki_entry(self):
+        episode = f'| {self.num}\n'
+        date = f'| {self.date_formated()}\n'
+        title = f'| {self.title_formated()}\n'
+        return f'|- \n {episode} {date} {title}'
 
     def p(self):
         print('num: ' + self.num)
