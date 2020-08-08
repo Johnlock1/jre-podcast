@@ -27,6 +27,9 @@ class Podcast:
     def extract_link(self):
         return self.tree.cssselect(selector['link'])[0].get('href')
 
+    def date_type(self, frm1='%m.%d.%y'):
+        return datetime.strptime(self.date,frm1)
+
     def date_formated(self, frm1='%m.%d.%y', frm2='%Y %b %d'):
         return datetime.strptime(self.date,frm1).strftime(frm2)
 

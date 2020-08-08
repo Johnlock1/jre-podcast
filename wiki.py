@@ -40,9 +40,9 @@ def table_build(data):
     return flight_content, mma_content, regural_content
 
 
-
-
 data = read_json()
+
+
 flight_content, mma_content, regural_content = table_build(data)
 
 flight_table = table_start + flight_content + table_end
