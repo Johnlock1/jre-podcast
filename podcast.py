@@ -35,7 +35,7 @@ class Podcast:
         t = ''
 
         if self.title[:5] == 'Fight':
-            return self.title + '\n'
+            return ('Fight', self.title + '\n')
         guests = re.split(regex, self.title)
         l = len(guests)
         for i, g in enumerate(guests):
@@ -48,15 +48,18 @@ class Podcast:
                 if i < l-1:
                     t += ', '
         t + '\n'
-        return t
+        if t[:3] in ['MMA', 'JRE']:
+            return ('MMA', t)
+        return ('Regular', t)
 
 
 
     def wiki_entry(self):
         episode = f'| {self.num}\n'
         date = f'| {self.date_formated()}\n'
-        title = f'| {self.title_formated()}\n'
-        return f'|- \n {episode} {date} {title}'
+        title = f'| {self.title_formated()[1]}\n'
+        table = self.title_formated()[0]
+        return (table, f'|- \n {episode} {date} {title}')
 
     def p(self):
         print('num: ' + self.num)
