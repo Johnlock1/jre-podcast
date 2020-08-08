@@ -18,19 +18,19 @@ class Scraper():
         if not os.path.exists(path+filename):
             self.podcasts = {}
         else:
-            with open(filename, 'r') as f:
+            with open(filename, 'r', encoding='utf-8') as f:
                 try:
                     self.podcasts = json.load(f)
                 except Exception as e:
                     print(e)
 
-
-
-
     def scrap_page(self, url):
-        response = requests.get(url)
-        tree = lxml.html.fromstring(response.text)
-        return tree.cssselect(selector['podcasts'])[0]
+        try:
+            response = requests.get(url)
+            tree = lxml.html.fromstring(response.text)
+            return tree.cssselect(selector['podcasts'])[0]
+        except:
+            self.output()
 
     def scrap_episode(self, html):
         p = Podcast()
@@ -45,7 +45,7 @@ class Scraper():
             self.podcasts[p.num] = p.date_formated(frm2='%Y %m %d'), p.title, p.link
 
     def sort_podcasts(self, reverse=True):
-            self.podcasts = {k: v for k, v in sorted(self.podcasts.items(), key=lambda item: item[1], reverse=reverse)}
+            self.podcasts = {k: v for k, v in sorted(self.podcasts.items(), key=lambda item: item[1][0], reverse=reverse)}
 
     def output(self):
         self.sort_podcasts()
@@ -55,15 +55,19 @@ class Scraper():
 
 if __name__ == '__main__':
     scpr = Scraper()
-    scpr.set_IO_file('podcasts-new1.json')
+    scpr.set_IO_file('podcasts.json')
 
-    for page in range(1, 2): # 168
+    for page in range(1, 172):
         print(f'Page: {page}')
 
         url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
         page_tree = scpr.scrap_page(url)
 
-        for e in range(2,11):
-            scpr.scrap_episode(page_tree[e])
+        for e in range(1,11):
+            try:
+                scpr.scrap_episode(page_tree[e])
+            except IndexError:
+                print(0)
+                break
 
     scpr.output()
