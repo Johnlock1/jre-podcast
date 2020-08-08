@@ -6,7 +6,8 @@ table_start = '{| class="wikitable collapsible collapsed"\n \
 |-\n \
 ! Episode\n \
 ! Date\n \
-! Title\n'
+! Title\n \
+! Link\n'
 
 table_end = '|}\n'
 
@@ -51,6 +52,10 @@ mma_table = table_start + mma_content + table_end
 regural_table = table_start + regural_content + table_end
 
 with open('table.txt', 'w+', encoding='utf-8') as f:
+    f.write('{{User sandbox}}\n<!-- EDIT BELOW THIS LINE -->\n\n')
+    f.write('== Fight Companion ==\n')
     f.write(flight_table)
+    f.write('== MMA Show ==\n')
     f.write(mma_table)
+    f.write('== Regular Episodes ==\n')
     f.write(regural_table)
