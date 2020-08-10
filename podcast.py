@@ -3,6 +3,7 @@ from datetime import datetime
 
 from config import selector
 
+
 class Podcast:
 
     def __init__(self):
@@ -28,10 +29,10 @@ class Podcast:
         return self.tree.cssselect(selector['link'])[0].get('href')
 
     def date_type(self, frm1='%m.%d.%y'):
-        return datetime.strptime(self.date,frm1)
+        return datetime.strptime(self.date, frm1)
 
     def date_formated(self, frm1='%m.%d.%y', frm2='%Y %b %d'):
-        return datetime.strptime(self.date,frm1).strftime(frm2)
+        return datetime.strptime(self.date, frm1).strftime(frm2)
 
     def title_formated(self):
         regex = ' with | & |, '
@@ -44,18 +45,16 @@ class Podcast:
         for i, g in enumerate(guests):
             if i == 0 and g[:3] in ['MMA', 'JRE']:
                 t += f'{g}'
-                if i < l-1:
+                if i < l - 1:
                     t += ' with '
             else:
                 t += f'[[{g}]]'
-                if i < l-1:
+                if i < l - 1:
                     t += ', '
         t + '\n'
         if t[:3] in ['MMA', 'JRE']:
             return ('MMA', t)
         return ('Regular', t)
-
-
 
     def wiki_entry(self):
         table = self.title_formated()[0]

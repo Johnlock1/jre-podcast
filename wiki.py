@@ -17,6 +17,7 @@ def read_json():
         data = json.load(json_file)
         return data
 
+
 def table_build(data):
     keys = data.keys
     count = 0

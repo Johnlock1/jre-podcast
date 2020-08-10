@@ -14,8 +14,9 @@ class Scraper():
     def set_IO_file(self, filename):
         self.filename = filename
 
-        path = os.path.realpath(__file__).replace(os.path.basename(__file__),'')
-        if not os.path.exists(path+filename):
+        path = os.path.realpath(__file__).replace(
+            os.path.basename(__file__), '')
+        if not os.path.exists(path + filename):
             self.podcasts = {}
         else:
             with open(filename, 'r', encoding='utf-8') as f:
@@ -42,10 +43,12 @@ class Scraper():
             print(f"True {p.num}")
         else:
             print(f"False {p.num}")
-            self.podcasts[p.num] = p.date_formated(frm2='%Y %m %d'), p.title, p.link
+            self.podcasts[p.num] = p.date_formated(
+                frm2='%Y %m %d'), p.title, p.link
 
     def sort_podcasts(self, reverse=True):
-            self.podcasts = {k: v for k, v in sorted(self.podcasts.items(), key=lambda item: item[1][0], reverse=reverse)}
+        self.podcasts = {k: v for k, v in sorted(
+            self.podcasts.items(), key=lambda item: item[1][0], reverse=reverse)}
 
     def output(self):
         self.sort_podcasts()
@@ -63,7 +66,7 @@ if __name__ == '__main__':
         url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
         page_tree = scpr.scrap_page(url)
 
-        for e in range(1,11):
+        for e in range(1, 11):
             try:
                 scpr.scrap_episode(page_tree[e])
             except IndexError:
