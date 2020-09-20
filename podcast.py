@@ -9,24 +9,47 @@ class Podcast:
     def __init__(self):
         pass
 
-    def from_tree(self, tree):
-        self.tree = tree
-        self.num = self.extract(selector['num'])
-        self.date = self.extract(selector['date'])
-        self.title = self.extract(selector['title'])
-        self.link = self.extract_link()
+    def from_html(self, html):
+        self.html = html
+        self.num = html.find_class('episode-num')[0].text_content()
+        self.date = html.cssselect(selector['date'])[0].text
+        thumb = html.cssselect(selector['thumbnail'])[0]
+        self.title = thumb.items()[3][1]
+        self.link = thumb.items()[1][1]
+        self.description = self._description()
+        self.guests = self._guests()
 
     def from_json_file(self, key, value):
         self.num = key
         self.date = value[0]
         self.title = value[1]
-        self.link = value[2]
+        self.guests = value[2]
+        self.description = value[3]
+        self.link = value[4]
 
-    def extract(self, selector):
-        return self.tree.cssselect(selector)[0].text_content()
+    def _guests(self):
+        guests = []
+        for i in range(20):
+            try:
+                guest = self.html.cssselect(
+                    f'div.podcast-content > strong:nth-child({i})')[0].text
+                if guest not in ('', ' '):
+                    guests.append(guest)
+            except IndexError as e:
+                pass
 
-    def extract_link(self):
-        return self.tree.cssselect(selector['link'])[0].get('href')
+        if len(guests) != 0:
+            return guests
+        else:
+            return None
+
+    def _description(self):
+        desc = self.html.cssselect(selector['content'])[0].text_content()
+
+        if desc != '':
+            return desc.split(".")[1].lstrip()
+        else:
+            return None
 
     def date_type(self, frm1='%m.%d.%y'):
         return datetime.strptime(self.date, frm1)

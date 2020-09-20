@@ -49,7 +49,7 @@ class Scraper():
 
     def scrap_episode(self, html):
         p = Podcast()
-        p.from_tree(html)
+        p.from_html(html)
         self.add(p)
 
     def add(self, p):
@@ -58,7 +58,7 @@ class Scraper():
         else:
             print(f"False {p.num}")
             self.podcasts[p.num] = p.date_formated(
-                frm2='%Y %m %d'), p.title, p.link
+                frm2='%Y %m %d'), p.title, p.guests, p.description, p.link
 
     def sort_podcasts(self, reverse=True):
         self.podcasts = {k: v for k, v in sorted(
@@ -73,7 +73,7 @@ class Scraper():
 if __name__ == '__main__':
 
     scpr = Scraper()
-    scpr.set_IO_file('podcasts.json')
+    scpr.set_IO_file('podcasts-1.json')
 
     # Pass number of pages to scrap as shell argurment
     # If else scrap all available pages
@@ -93,7 +93,6 @@ if __name__ == '__main__':
             try:
                 scpr.scrap_episode(page_tree[e])
             except IndexError:
-                print(0)
                 break
 
     scpr.output()
