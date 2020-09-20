@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import lxml.html
 import json
@@ -70,10 +71,19 @@ class Scraper():
 
 
 if __name__ == '__main__':
+
     scpr = Scraper()
     scpr.set_IO_file('podcasts.json')
 
-    for page in range(1, scpr.pages()):
+    # Pass number of pages to scrap as shell argurment
+    # If else scrap all available pages
+    if len(sys.argv) > 2:
+        sys.exit("Usage: python degrees.py [pages]")
+    pages = int(sys.argv[1]) + \
+        1 if len(sys.argv) == 2 else scpr.pages()
+
+    # Scrap pages, one by one
+    for page in range(1, pages):
         print(f'Page: {page}')
 
         url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
