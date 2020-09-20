@@ -5,3 +5,6 @@ __pycache__/
 # Virtual Enviroment
 /env
 /venv
+
+# Python file to perform temporary tests
+test.py

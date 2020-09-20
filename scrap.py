@@ -25,6 +25,19 @@ class Scraper():
                 except Exception as e:
                     print(e)
 
+    def pages(self):
+        """
+        Return the number of pages.
+        In case of Exception, arbitrary return 200
+        """
+        try:
+            response = requests.get('http://podcasts.joerogan.net/podcasts/')
+            tree = lxml.html.fromstring(response.text)
+            return int(tree.cssselect(selector['pages'])[0].text) + 1
+        except:
+
+            return 200
+
     def scrap_page(self, url):
         try:
             response = requests.get(url)
@@ -60,7 +73,7 @@ if __name__ == '__main__':
     scpr = Scraper()
     scpr.set_IO_file('podcasts.json')
 
-    for page in range(1, 172):
+    for page in range(1, scpr.pages()):
         print(f'Page: {page}')
 
         url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
