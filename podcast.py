@@ -21,11 +21,11 @@ class Podcast:
 
     def from_json_file(self, key, value):
         self.num = key
-        self.date = value[0]
-        self.title = value[1]
-        self.guests = value[2]
-        self.description = value[3]
-        self.link = value[4]
+        self.date = value[1]
+        self.title = value[2]
+        self.guests = value[3]
+        self.description = value[4]
+        self.link = value[5]
 
     def _guests(self):
         guests = []
@@ -78,14 +78,6 @@ class Podcast:
         if t[:3] in ['MMA', 'JRE']:
             return ('MMA', t)
         return ('Regular', t)
-
-    def wiki_entry(self):
-        table = self.title_formated()[0]
-        episode = f'| {self.num}\n'
-        date = f'| {self.date}\n'
-        title = f'| {self.title_formated()[1]}\n'
-        link = f'| {self.link}\n'
-        return (table, f'|- \n {episode} {date} {title} {link}')
 
     def p(self):
         print('num: ' + self.num)
