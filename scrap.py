@@ -57,8 +57,8 @@ class Scraper():
             print(f"True {p.num}")
         else:
             print(f"False {p.num}")
-            self.podcasts[p.num] = p.date_formated(
-                frm2='%Y %m %d'), p.title, p.guests, p.description, p.link
+            self.podcasts[p.num] = p.date_formated(frm2='%y.%m.%d'), p.date_formated(
+                frm2='%B %d, %Y'), p.title, p.guests, p.description, p.link
 
     def sort_podcasts(self, reverse=True):
         self.podcasts = {k: v for k, v in sorted(
