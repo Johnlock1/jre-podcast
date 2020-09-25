@@ -53,12 +53,12 @@ class Scraper():
         self.add(p)
 
     def add(self, p):
-        if p.num in self.podcasts:
-            print(f"True {p.num}")
-        else:
-            print(f"False {p.num}")
-            self.podcasts[p.num] = p.date_formated(frm2='%y.%m.%d'), p.date_formated(
-                frm2='%B %d, %Y'), p.title, p.guests, p.description, p.link
+        # if p.num in self.podcasts:
+        # print(f"True {p.num}")
+        # else:
+        # print(f"False {p.num}")
+        self.podcasts[p.num] = p.date_formated(frm2='%y.%m.%d'), p.date_formated(
+            frm2='%B %d, %Y'), p.title, p.guests, p.description, p.link
 
     def sort_podcasts(self, reverse=True):
         self.podcasts = {k: v for k, v in sorted(
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     # Scrap pages, one by one
     for page in range(1, pages):
-        print(f'Page: {page}')
+        print(f'- Page: {page} -')
 
         url = f'http://podcasts.joerogan.net/podcasts/page/{page}?load'
         page_tree = scpr.scrap_page(url)
