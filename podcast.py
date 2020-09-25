@@ -47,9 +47,9 @@ class Podcast:
         desc = self.html.cssselect(selector['content'])[0].text_content()
 
         if desc != '':
-            return desc.split(".")[1].lstrip()
+            return re.sub('^#\w+.', '', desc).strip()
         else:
-            return None
+            return ''
 
     def date_type(self, frm1='%m.%d.%y'):
         return datetime.strptime(self.date, frm1)
