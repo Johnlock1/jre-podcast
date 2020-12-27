@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # Pass number of pages to scrap as shell argurment
     # If else scrap all available pages
     if len(sys.argv) > 2:
-        sys.exit("Usage: python degrees.py [pages]")
+        sys.exit("Usage: python scrap.py [pages]")
     pages = int(sys.argv[1]) + \
         1 if len(sys.argv) == 2 else scpr.pages()
 
